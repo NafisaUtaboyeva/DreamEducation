@@ -19,6 +19,7 @@ namespace DreamEducation.Domain.Entities.Users
 
         [DataType(DataType.Password), Required(ErrorMessage = "You must enter password!")]
         public string Password { get; set; }
+        public string Image { get; set; }
 
 
         public DateTime CreatedAt { get; set; }
@@ -28,17 +29,17 @@ namespace DreamEducation.Domain.Entities.Users
         public ItemState State { get; set; }
 
 
-        public void Created()
+        public void Create()
         {
             CreatedAt = DateTime.Now;
             State = ItemState.Created;
         }
-        public void Updated()
+        public void Update()
         {
             UpdatedAt = DateTime.Now;
             State = ItemState.Updated;
         }
-        public void Deleted()
+        public void Delete()
         {
             DeletedAt = DateTime.Now;
             State = ItemState.Deleted;

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DreamEducation.Data.Repositories
 {
-    internal class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         internal DreamEduDbContext dbContext;
         internal DbSet<T> dbSet;

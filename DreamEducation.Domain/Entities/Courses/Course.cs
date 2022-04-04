@@ -4,6 +4,7 @@ using DreamEducation.Domain.Entities.ManyToMany;
 using DreamEducation.Domain.Entities.Mentors;
 using DreamEducation.Domain.Entities.Tests;
 using DreamEducation.Domain.Enums;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -41,19 +42,19 @@ namespace DreamEducation.Domain.Entities.Courses
         public ItemState State { get; set; }
 
 
-        public void Created()
+        public void Create()
         {
             CreatedAt = DateTime.Now;
             State = ItemState.Created;
         }
 
-        public void Deleted()
+        public void Delete()
         {
             DeletedAt = DateTime.Now;
             State = ItemState.Deleted;
         }
 
-        public void Updated()
+        public void Update()
         {
             UpdatedAt = DateTime.Now;
             State = ItemState.Updated;

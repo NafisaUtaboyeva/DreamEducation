@@ -11,7 +11,7 @@ namespace DreamEducation.Domain.Entities.Tests
         public string VariantB { get; set; }
         public string VariantC { get; set; }
         public string VariantD { get; set; }
-        public string Answer { get; internal set; }
+        public string Answer { get; set; }
         public Guid TestId { get; set; }
 
         [ForeignKey(nameof(TestId))]

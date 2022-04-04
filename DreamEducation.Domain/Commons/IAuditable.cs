@@ -12,8 +12,8 @@ namespace DreamEducation.Domain.Commons
         Guid? UpdatedBy { get; set; }
         ItemState State { get; set; }
 
-        void Created();
-        void Updated();
-        void Deleted();
+        void Create();
+        void Update();
+        void Delete();
     }
 }

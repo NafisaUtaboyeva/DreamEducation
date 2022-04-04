@@ -1,6 +1,7 @@
 ﻿using DreamEducation.Domain.Commons;
 using DreamEducation.Domain.Entities.Courses;
 using DreamEducation.Domain.Enums;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -26,19 +27,19 @@ namespace DreamEducation.Domain.Entities.Chapters
         public ItemState State { get; set; }
 
 
-        public void Created()
+        public void Create()
         {
             CreatedAt = DateTime.Now;
             State = ItemState.Created;
         }
 
-        public void Deleted()
+        public void Delete()
         {
             DeletedAt = DateTime.Now;
             State = ItemState.Deleted;
         }
 
-        public void Updated()
+        public void Update()
         {
             UpdatedAt = DateTime.Now;
             State = ItemState.Updated;

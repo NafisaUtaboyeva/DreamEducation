@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DreamEducation.Data.Contexts;
+using DreamEducation.Data.IRepositories;
+using DreamEducation.Domain.Entities.Users;
+using Serilog;
 
 namespace DreamEducation.Data.Repositories
 {
-    internal class StudentRepository
+    public class StudentRepository : GenericRepository<Student>, IStudentRepository
     {
+        public StudentRepository(DreamEduDbContext dbContext, ILogger logger) : base(dbContext, logger)
+        {
+        }
     }
 }

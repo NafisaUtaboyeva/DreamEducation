@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DreamEducation.Data.IRepositories
@@ -13,6 +10,7 @@ namespace DreamEducation.Data.IRepositories
         IMentorRepository Mentors { get; }
         IChapterRepository Chapters { get; }
         ITestRepository Tests { get; }
+        IQuestionRepository Questions { get; }
         Task SaveChangesAsync();
     }
 }
