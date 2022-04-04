@@ -1,15 +1,15 @@
-﻿using DreamEducation.Domain.Entities.Users;
-using DreamEducation.Service.DTOs.Students;
-using AutoMapper;
-using DreamEducation.Service.DTOs.Mentors;
-using DreamEducation.Domain.Entities.Mentors;
-using DreamEducation.Service.DTOs.Courses;
-using DreamEducation.Domain.Entities.Courses;
-using DreamEducation.Service.DTOs.Chapters;
+﻿using AutoMapper;
 using DreamEducation.Domain.Entities.Chapters;
-using DreamEducation.Service.DTOs;
+using DreamEducation.Domain.Entities.Courses;
+using DreamEducation.Domain.Entities.Mentors;
 using DreamEducation.Domain.Entities.Tests;
+using DreamEducation.Domain.Entities.Users;
+using DreamEducation.Service.DTOs;
+using DreamEducation.Service.DTOs.Chapters;
+using DreamEducation.Service.DTOs.Courses;
+using DreamEducation.Service.DTOs.Mentors;
 using DreamEducation.Service.DTOs.Questions;
+using DreamEducation.Service.DTOs.Students;
 
 namespace DreamEducation.Service.Mappers
 {

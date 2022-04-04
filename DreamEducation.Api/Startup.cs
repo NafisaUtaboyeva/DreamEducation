@@ -1,6 +1,7 @@
 using DreamEducation.Api.Extensions;
 using DreamEducation.Data.Contexts;
 using DreamEducation.Service.Helpers;
+using DreamEducation.Service.Mappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -37,6 +38,8 @@ namespace DreamEducation.Api
             });
 
             services.AddCustomServices();
+            services.AddHttpContextAccessor();
+            services.AddAutoMapper(typeof(MappingProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

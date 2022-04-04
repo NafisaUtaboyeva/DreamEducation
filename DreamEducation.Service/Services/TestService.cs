@@ -1,17 +1,15 @@
-﻿using DreamEducation.Data.IRepositories;
+﻿using AutoMapper;
+using DreamEducation.Data.IRepositories;
 using DreamEducation.Domain.Commons;
 using DreamEducation.Domain.Configurations;
 using DreamEducation.Domain.Entities.Tests;
 using DreamEducation.Domain.Enums;
+using DreamEducation.Service.DTOs;
 using DreamEducation.Service.Extensions;
 using DreamEducation.Service.Interfaces;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DreamEducation.Service.Services
@@ -19,25 +17,20 @@ namespace DreamEducation.Service.Services
     public class TestService : ITestService
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
 
-        public TestService(IUnitOfWork unitOfWork, IWebHostEnvironment env, IConfiguration config)
+        public TestService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
+            this.mapper = mapper;
         }
 
-        public async Task<BaseResponse<Test>> CreateAsync(Test test)
+        public async Task<BaseResponse<Test>> CreateAsync(TestForCreationDto testDto)
         {
             var response = new BaseResponse<Test>();
 
-            // check for student
-            var existTest = await unitOfWork.Tests.GetAsync(p => p.Title == test.Title);
-            if (existTest is not null)
-            {
-                response.Error = new ErrorResponse(400, "User is exist");
-                return response;
-            }
-
-            var result = await unitOfWork.Tests.CreateAsync(test);
+            Test mappedTest = mapper.Map<Test>(testDto);
+            var result = await unitOfWork.Tests.CreateAsync(mappedTest);
 
             await unitOfWork.SaveChangesAsync();
 
@@ -50,11 +43,10 @@ namespace DreamEducation.Service.Services
         {
             var response = new BaseResponse<bool>();
 
-            // check for exist student
             var existTest = await unitOfWork.Tests.GetAsync(expression);
             if (existTest is null)
             {
-                response.Error = new ErrorResponse(404, "User not found");
+                response.Error = new ErrorResponse(404, "Test not found");
                 return response;
             }
             existTest.Delete();
@@ -70,8 +62,6 @@ namespace DreamEducation.Service.Services
 
         public async Task<BaseResponse<IEnumerable<Test>>> GetAllAsync(PaginationParams @params, Expression<Func<Test, bool>> expression = null)
         {
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-
             var response = new BaseResponse<IEnumerable<Test>>();
 
             var tests = await unitOfWork.Tests.GetAllAsync(expression);
@@ -97,7 +87,7 @@ namespace DreamEducation.Service.Services
             return response;
         }
 
-        public async Task<BaseResponse<Test>> UpdateAsync(Guid id, Test test)
+        public async Task<BaseResponse<Test>> UpdateAsync(Guid id, TestForCreationDto test)
         {
             var response = new BaseResponse<Test>();
 

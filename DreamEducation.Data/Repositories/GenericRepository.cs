@@ -39,7 +39,7 @@ namespace DreamEducation.Data.Repositories
 
             return true;
         }
-
+#pragma warning disable
         public async Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>> expression = null)
         {
             return expression is null ? dbSet : dbSet.Where(expression);
@@ -59,3 +59,5 @@ namespace DreamEducation.Data.Repositories
         }
     }
 }
+
+#pragma warning restore

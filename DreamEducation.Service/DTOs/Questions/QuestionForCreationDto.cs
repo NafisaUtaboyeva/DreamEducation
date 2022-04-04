@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DreamEducation.Service.DTOs.Questions
 {
@@ -13,7 +9,7 @@ namespace DreamEducation.Service.DTOs.Questions
         public string VariantB { get; set; }
         public string VariantC { get; set; }
         public string VariantD { get; set; }
-        public string Answer { get;  set; }
+        public string Answer { get; set; }
         public Guid TestId { get; set; }
     }
 }

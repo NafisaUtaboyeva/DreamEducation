@@ -1,7 +1,6 @@
 ﻿using DreamEducation.Domain.Commons;
 using DreamEducation.Domain.Entities.Courses;
 using DreamEducation.Domain.Enums;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 

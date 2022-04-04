@@ -1,20 +1,19 @@
 ﻿using DreamEducation.Domain.Commons;
 using DreamEducation.Domain.Configurations;
 using DreamEducation.Domain.Entities.Chapters;
+using DreamEducation.Service.DTOs.Chapters;
 using DreamEducation.Service.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DreamEducation.Service.Services
 {
     public class ChapterService : IChapterService
     {
-        public Task<BaseResponse<Chapter>> CreateAsync(Chapter chapter)
+        public Task<BaseResponse<Chapter>> CreateAsync(ChapterForCreationDto chapter)
         {
             throw new NotImplementedException();
         }
@@ -39,7 +38,7 @@ namespace DreamEducation.Service.Services
             throw new NotImplementedException();
         }
 
-        public Task<BaseResponse<Chapter>> UpdateAsync(Guid id, Chapter chapter)
+        public Task<BaseResponse<Chapter>> UpdateAsync(Guid id, ChapterForCreationDto chapter)
         {
             throw new NotImplementedException();
         }
