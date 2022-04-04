@@ -36,7 +36,7 @@ namespace DreamEducation.Service.Services
         {
             var response = new BaseResponse<Student>();
 
-            var existStudent = await unitOfWork.Students.GetAsync(p => p.Login == studentDto.Login || p.Email == studentDto.Email);
+            var existStudent = await unitOfWork.Students.GetAsync(p => p.Username == studentDto.Login || p.Email == studentDto.Email);
             if (existStudent is not null)
             {
                 response.Error = new ErrorResponse(400, "User is exist");

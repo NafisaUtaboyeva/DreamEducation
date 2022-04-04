@@ -15,7 +15,7 @@ namespace DreamEducation.Domain.Entities.Users
         [RegularExpression(@"^[a-zA-Z0-9_.-]+@[gmail|yandex]+.[a-zA-Z0-9-.]+$", ErrorMessage = "You entered an error email!")]
         [DataType(DataType.EmailAddress), Required(ErrorMessage = "You must enter an email!")]
         public string Email { get; set; }
-        public string Login { get; set; }
+        public string Username { get; set; }
 
         [DataType(DataType.Password), Required(ErrorMessage = "You must enter password!")]
         public string Password { get; set; }
