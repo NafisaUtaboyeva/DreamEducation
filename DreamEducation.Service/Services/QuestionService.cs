@@ -102,7 +102,7 @@ namespace DreamEducation.Service.Services
                 return response;
             }
 
-            question = mapper.Map<Question>(dto);
+            question = mapper.Map<QuestionForCreationDto, Question>(dto, question);
 
             question.Update();
 

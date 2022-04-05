@@ -102,7 +102,8 @@ namespace DreamEducation.Service.Services
                 return response;
             }
 
-            test1 = mapper.Map<Test>(test);
+            test1.Title = test.Title;
+            test1.AmountOfQuestions = test.AmountOfQuestions;
             test1.Update();
 
             var result = await unitOfWork.Tests.UpdateAsync(test1);

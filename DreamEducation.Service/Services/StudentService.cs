@@ -182,8 +182,13 @@ namespace DreamEducation.Service.Services
                 return response;
             }
 
-            student = mapper.Map<Student>(studentDto);
-
+            student.FirstName = studentDto.FirstName;
+            student.LastName = studentDto.LastName;
+            student.Phone = studentDto.Phone;
+            student.Email = studentDto.Email;
+            student.Username = studentDto.Username;
+            student.Password = studentDto.Password;
+            student.Image = await FileExtensions.SaveFileAsync(studentDto.Image.OpenReadStream(), studentDto.Image.FileName, config, env);
             student.Update();
 
             student.Password = student.Password.ToHash256();
