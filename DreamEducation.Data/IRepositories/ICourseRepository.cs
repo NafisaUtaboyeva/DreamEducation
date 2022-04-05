@@ -4,5 +4,6 @@ namespace DreamEducation.Data.IRepositories
 {
     public interface ICourseRepository : IGenericRepository<Course>
     {
+
     }
 }

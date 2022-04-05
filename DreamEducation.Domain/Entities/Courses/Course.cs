@@ -1,8 +1,8 @@
 ﻿using DreamEducation.Domain.Commons;
 using DreamEducation.Domain.Entities.Chapters;
-using DreamEducation.Domain.Entities.ManyToMany;
 using DreamEducation.Domain.Entities.Mentors;
 using DreamEducation.Domain.Entities.Tests;
+using DreamEducation.Domain.Entities.Users;
 using DreamEducation.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -31,7 +31,7 @@ namespace DreamEducation.Domain.Entities.Courses
         public Test Test { get; set; }
 
         public virtual ICollection<Chapter> Chapters { get; set; }
-        public virtual ICollection<CourseStudent> Students { get; set; }
+        public virtual ICollection<Student> Students { get; set; }
 
 
         public DateTime CreatedAt { get; set; }

@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -185,7 +184,6 @@ namespace DreamEducation.Service.Services
             }
 
             mentor = mapper.Map<Mentor>(mentorDto);
-            mentor.Id = id;
 
             mentor.Update();
 

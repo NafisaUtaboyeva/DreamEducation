@@ -1,6 +1,5 @@
 ﻿using DreamEducation.Domain.Entities.Chapters;
 using DreamEducation.Domain.Entities.Courses;
-using DreamEducation.Domain.Entities.ManyToMany;
 using DreamEducation.Domain.Entities.Mentors;
 using DreamEducation.Domain.Entities.Tests;
 using DreamEducation.Domain.Entities.Users;
@@ -23,21 +22,21 @@ namespace DreamEducation.Data.Contexts
         public virtual DbSet<Test> Tests { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            builder.Entity<CourseStudent>()
-                .HasKey(cs => new { cs.CourseId, cs.StudentId });
+        //protected override void OnModelCreating(ModelBuilder builder)
+        //{
+        //    builder.Entity<CourseStudent>()
+        //        .HasKey(cs => new { cs.CourseId, cs.StudentId });
 
-            builder.Entity<CourseStudent>()
-                .HasOne(cs => cs.Course)
-                .WithMany(cs => cs.Students)
-                .HasForeignKey(cs => cs.CourseId);
+        //    builder.Entity<CourseStudent>()
+        //        .HasOne(cs => cs.Course)
+        //        .WithMany(cs => cs.Students)
+        //        .HasForeignKey(cs => cs.CourseId);
 
-            builder.Entity<CourseStudent>()
-                .HasOne(cs => cs.Student)
-                .WithMany(cs => cs.Courses)
-                .HasForeignKey(cs => cs.StudentId);
-        }
+        //    builder.Entity<CourseStudent>()
+        //        .HasOne(cs => cs.Student)
+        //        .WithMany(cs => cs.Courses)
+        //        .HasForeignKey(cs => cs.StudentId);
+        //}
 
     }
 }

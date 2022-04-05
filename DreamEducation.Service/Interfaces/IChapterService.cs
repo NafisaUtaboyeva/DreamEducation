@@ -2,9 +2,9 @@
 using DreamEducation.Domain.Configurations;
 using DreamEducation.Domain.Entities.Chapters;
 using DreamEducation.Service.DTOs.Chapters;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -17,7 +17,9 @@ namespace DreamEducation.Service.Interfaces
         Task<BaseResponse<IEnumerable<Chapter>>> GetAllAsync(PaginationParams @params, Expression<Func<Chapter, bool>> expression = null);
         Task<BaseResponse<bool>> DeleteAsync(Expression<Func<Chapter, bool>> expression);
         Task<BaseResponse<Chapter>> UpdateAsync(Guid id, ChapterForCreationDto chapter);
-
-        Task<string> SaveFileAsync(Stream file, string fileName);
+        Task<BaseResponse<Chapter>> DeleteVideoAsync(Expression<Func<Chapter, bool>> expression);
+        Task<BaseResponse<Chapter>> SetVideoAsync(Expression<Func<Chapter, bool>> expression, IFormFile video);
+        Task<BaseResponse<Chapter>> SetLectionAsync(Expression<Func<Chapter, bool>> expression, IFormFile lection);
+        Task<BaseResponse<Chapter>> DeleteLectionAsync(Expression<Func<Chapter, bool>> expression);
     }
 }

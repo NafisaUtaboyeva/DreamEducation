@@ -9,6 +9,7 @@ using DreamEducation.Service.Extensions;
 using DreamEducation.Service.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -66,6 +67,8 @@ namespace DreamEducation.Service.Services
 
             var tests = await unitOfWork.Tests.GetAllAsync(expression);
 
+            tests = tests.Where(p => p.State != ItemState.Deleted);
+
             response.Data = tests.ToPagedList(@params);
 
             return response;
@@ -99,9 +102,7 @@ namespace DreamEducation.Service.Services
                 return response;
             }
 
-
-            test1.Title = test.Title;
-            test1.AmountOfQuestions = test.AmountOfQuestions;
+            test1 = mapper.Map<Test>(test);
             test1.Update();
 
             var result = await unitOfWork.Tests.UpdateAsync(test1);

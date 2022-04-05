@@ -4,7 +4,6 @@ using DreamEducation.Domain.Entities.Tests;
 using DreamEducation.Domain.Enums;
 using DreamEducation.Service.DTOs;
 using DreamEducation.Service.Interfaces;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -17,11 +16,9 @@ namespace DreamEducation.Api.Controllers
     public class TestsController : ControllerBase
     {
         private readonly ITestService testService;
-        private readonly IWebHostEnvironment env;
-        public TestsController(ITestService testService, IWebHostEnvironment env)
+        public TestsController(ITestService testService)
         {
             this.testService = testService;
-            this.env = env;
         }
 
         [HttpPost]
@@ -49,9 +46,9 @@ namespace DreamEducation.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<BaseResponse<Test>>> Update(Guid id, TestForCreationDto studentDto)
+        public async Task<ActionResult<BaseResponse<Test>>> Update(Guid id, TestForCreationDto dto)
         {
-            var result = await testService.UpdateAsync(id, studentDto);
+            var result = await testService.UpdateAsync(id, dto);
 
             return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }

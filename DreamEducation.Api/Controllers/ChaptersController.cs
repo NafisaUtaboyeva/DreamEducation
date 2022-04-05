@@ -1,5 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DreamEducation.Domain.Commons;
+using DreamEducation.Domain.Configurations;
+using DreamEducation.Domain.Entities.Chapters;
+using DreamEducation.Domain.Enums;
+using DreamEducation.Service.DTOs.Chapters;
+using DreamEducation.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -9,36 +18,83 @@ namespace DreamEducation.Api.Controllers
     [ApiController]
     public class ChaptersController : ControllerBase
     {
-        // GET: api/<ChaptersController>
+        private readonly IChapterService chapterService;
+
+        public ChaptersController(IChapterService chapterService)
+        {
+            this.chapterService = chapterService;
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult<BaseResponse<IEnumerable<Chapter>>>> GetAll([FromQuery] PaginationParams @params)
         {
-            return new string[] { "value1", "value2" };
+            var result = await chapterService.GetAllAsync(@params);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
 
-        // GET api/<ChaptersController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<BaseResponse<Chapter>>> Get(Guid id)
         {
-            return "value";
+            var result = await chapterService.GetAsync(p => p.Id == id);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
 
-        // POST api/<ChaptersController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<BaseResponse<Chapter>>> Create([FromForm] ChapterForCreationDto chapter)
         {
+            var result = await chapterService.CreateAsync(chapter);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
 
-        // PUT api/<ChaptersController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<ActionResult<BaseResponse<Chapter>>> Update(Guid id, ChapterForCreationDto chapter)
         {
+            var result = await chapterService.UpdateAsync(id, chapter);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
 
-        // DELETE api/<ChaptersController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult<BaseResponse<Chapter>>> Delete(Guid id)
         {
+            var result = await chapterService.DeleteAsync(p => p.Id == id && p.State != ItemState.Deleted);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
+        }
+
+        [HttpPost("Video/{id}")]
+        public async Task<ActionResult<Chapter>> SetVideo(Guid id, IFormFile video)
+        {
+            var result = await chapterService.SetVideoAsync(p => p.Id == id, video);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
+        }
+
+        [HttpDelete("Video/{id}")]
+        public async Task<ActionResult<Chapter>> DeleteVideo(Guid id)
+        {
+            var result = await chapterService.DeleteVideoAsync(p => p.Id == id);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
+        }
+
+        [HttpPost("Lection/{id}")]
+        public async Task<ActionResult<Chapter>> SetLection(Guid id, IFormFile document)
+        {
+            var result = await chapterService.SetLectionAsync(p => p.Id == id, document);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
+        }
+
+        [HttpDelete("Lection/{id}")]
+        public async Task<ActionResult<Chapter>> DeleteLection(Guid id)
+        {
+            var result = await chapterService.DeleteLectionAsync(p => p.Id == id);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
     }
 }

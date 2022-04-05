@@ -14,10 +14,10 @@ namespace DreamEducation.Api.Controllers
 {
     [ApiController]
     [Route("Api/[controller]")]
-    public class MentorController : ControllerBase
+    public class MentorsController : ControllerBase
     {
         private readonly IMentorService mentorService;
-        public MentorController(IMentorService mentorService, IWebHostEnvironment env)
+        public MentorsController(IMentorService mentorService, IWebHostEnvironment env)
         {
             this.mentorService = mentorService;
         }
@@ -47,7 +47,7 @@ namespace DreamEducation.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<BaseResponse<Mentor>>> Update(Guid id, [FromForm]MentorForCreationDto dto)
+        public async Task<ActionResult<BaseResponse<Mentor>>> Update(Guid id, [FromForm] MentorForCreationDto dto)
         {
             var result = await mentorService.UpdateAsync(id, dto);
 

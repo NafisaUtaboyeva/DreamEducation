@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -84,7 +83,7 @@ namespace DreamEducation.Service.Services
 
             var student = await unitOfWork.Students.GetAsync(expression);
 
-            if(student is null || student.State == ItemState.Deleted)
+            if (student is null || student.State == ItemState.Deleted)
             {
                 response.Error = new ErrorResponse(404, "User not found!");
                 return response;
@@ -184,7 +183,6 @@ namespace DreamEducation.Service.Services
             }
 
             student = mapper.Map<Student>(studentDto);
-            student.Id = id;
 
             student.Update();
 

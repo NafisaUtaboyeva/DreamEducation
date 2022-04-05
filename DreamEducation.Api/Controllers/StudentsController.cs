@@ -1,7 +1,6 @@
 ﻿using DreamEducation.Domain.Commons;
 using DreamEducation.Domain.Configurations;
 using DreamEducation.Domain.Entities.Users;
-using DreamEducation.Domain.Enums;
 using DreamEducation.Service.DTOs.Students;
 using DreamEducation.Service.Interfaces;
 using Microsoft.AspNetCore.Hosting;
@@ -49,7 +48,7 @@ namespace DreamEducation.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<BaseResponse<Student>>> Update(Guid id, [FromForm]StudentForCreationDto studentDto)
+        public async Task<ActionResult<BaseResponse<Student>>> Update(Guid id, [FromForm] StudentForCreationDto studentDto)
         {
             var result = await studentService.UpdateAsync(id, studentDto);
 

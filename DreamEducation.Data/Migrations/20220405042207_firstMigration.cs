@@ -1,6 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
 namespace DreamEducation.Data.Migrations
 {
@@ -17,7 +16,7 @@ namespace DreamEducation.Data.Migrations
                     LastName = table.Column<string>(type: "text", nullable: true),
                     Phone = table.Column<string>(type: "text", nullable: true),
                     Email = table.Column<string>(type: "text", nullable: false),
-                    Login = table.Column<string>(type: "text", nullable: true),
+                    Username = table.Column<string>(type: "text", nullable: true),
                     Password = table.Column<string>(type: "text", nullable: false),
                     Image = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -40,7 +39,7 @@ namespace DreamEducation.Data.Migrations
                     LastName = table.Column<string>(type: "text", nullable: true),
                     Phone = table.Column<string>(type: "text", nullable: true),
                     Email = table.Column<string>(type: "text", nullable: false),
-                    Login = table.Column<string>(type: "text", nullable: true),
+                    Username = table.Column<string>(type: "text", nullable: true),
                     Password = table.Column<string>(type: "text", nullable: false),
                     Image = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -112,15 +111,19 @@ namespace DreamEducation.Data.Migrations
                 name: "Questions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Text = table.Column<string>(type: "text", nullable: true),
                     VariantA = table.Column<string>(type: "text", nullable: true),
                     VariantB = table.Column<string>(type: "text", nullable: true),
                     VariantC = table.Column<string>(type: "text", nullable: true),
                     VariantD = table.Column<string>(type: "text", nullable: true),
                     Answer = table.Column<string>(type: "text", nullable: true),
-                    TestId = table.Column<Guid>(type: "uuid", nullable: false)
+                    TestId = table.Column<Guid>(type: "uuid", nullable: false),
+                    State = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -163,21 +166,21 @@ namespace DreamEducation.Data.Migrations
                 name: "CourseStudent",
                 columns: table => new
                 {
-                    CourseId = table.Column<Guid>(type: "uuid", nullable: false),
-                    StudentId = table.Column<Guid>(type: "uuid", nullable: false)
+                    CoursesId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StudentsId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseStudent", x => new { x.CourseId, x.StudentId });
+                    table.PrimaryKey("PK_CourseStudent", x => new { x.CoursesId, x.StudentsId });
                     table.ForeignKey(
-                        name: "FK_CourseStudent_Courses_CourseId",
-                        column: x => x.CourseId,
+                        name: "FK_CourseStudent_Courses_CoursesId",
+                        column: x => x.CoursesId,
                         principalTable: "Courses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CourseStudent_Students_StudentId",
-                        column: x => x.StudentId,
+                        name: "FK_CourseStudent_Students_StudentsId",
+                        column: x => x.StudentsId,
                         principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -199,9 +202,9 @@ namespace DreamEducation.Data.Migrations
                 column: "TestId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourseStudent_StudentId",
+                name: "IX_CourseStudent_StudentsId",
                 table: "CourseStudent",
-                column: "StudentId");
+                column: "StudentsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Questions_TestId",

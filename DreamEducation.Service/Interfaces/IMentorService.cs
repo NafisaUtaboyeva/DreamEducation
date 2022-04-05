@@ -5,7 +5,6 @@ using DreamEducation.Service.DTOs.Mentors;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 

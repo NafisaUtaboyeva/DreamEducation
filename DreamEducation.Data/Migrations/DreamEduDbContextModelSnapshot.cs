@@ -19,6 +19,21 @@ namespace DreamEducation.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.10")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+            modelBuilder.Entity("CourseStudent", b =>
+                {
+                    b.Property<Guid>("CoursesId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("StudentsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CoursesId", "StudentsId");
+
+                    b.HasIndex("StudentsId");
+
+                    b.ToTable("CourseStudent");
+                });
+
             modelBuilder.Entity("DreamEducation.Domain.Entities.Chapters.Chapter", b =>
                 {
                     b.Property<Guid>("Id")
@@ -113,21 +128,6 @@ namespace DreamEducation.Data.Migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("DreamEducation.Domain.Entities.ManyToMany.CourseStudent", b =>
-                {
-                    b.Property<Guid>("CourseId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("StudentId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("CourseId", "StudentId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("CourseStudent");
-                });
-
             modelBuilder.Entity("DreamEducation.Domain.Entities.Mentors.Mentor", b =>
                 {
                     b.Property<Guid>("Id")
@@ -179,19 +179,33 @@ namespace DreamEducation.Data.Migrations
 
             modelBuilder.Entity("DreamEducation.Domain.Entities.Tests.Question", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Answer")
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("State")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("TestId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Text")
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("VariantA")
                         .HasColumnType("text");
@@ -293,6 +307,21 @@ namespace DreamEducation.Data.Migrations
                     b.ToTable("Students");
                 });
 
+            modelBuilder.Entity("CourseStudent", b =>
+                {
+                    b.HasOne("DreamEducation.Domain.Entities.Courses.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CoursesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DreamEducation.Domain.Entities.Users.Student", null)
+                        .WithMany()
+                        .HasForeignKey("StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DreamEducation.Domain.Entities.Chapters.Chapter", b =>
                 {
                     b.HasOne("DreamEducation.Domain.Entities.Courses.Course", "Course")
@@ -323,25 +352,6 @@ namespace DreamEducation.Data.Migrations
                     b.Navigation("Test");
                 });
 
-            modelBuilder.Entity("DreamEducation.Domain.Entities.ManyToMany.CourseStudent", b =>
-                {
-                    b.HasOne("DreamEducation.Domain.Entities.Courses.Course", "Course")
-                        .WithMany("Students")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DreamEducation.Domain.Entities.Users.Student", "Student")
-                        .WithMany("Courses")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("DreamEducation.Domain.Entities.Tests.Question", b =>
                 {
                     b.HasOne("DreamEducation.Domain.Entities.Tests.Test", "Test")
@@ -356,8 +366,6 @@ namespace DreamEducation.Data.Migrations
             modelBuilder.Entity("DreamEducation.Domain.Entities.Courses.Course", b =>
                 {
                     b.Navigation("Chapters");
-
-                    b.Navigation("Students");
                 });
 
             modelBuilder.Entity("DreamEducation.Domain.Entities.Mentors.Mentor", b =>
@@ -368,11 +376,6 @@ namespace DreamEducation.Data.Migrations
             modelBuilder.Entity("DreamEducation.Domain.Entities.Tests.Test", b =>
                 {
                     b.Navigation("Questions");
-                });
-
-            modelBuilder.Entity("DreamEducation.Domain.Entities.Users.Student", b =>
-                {
-                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

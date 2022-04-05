@@ -1,10 +1,10 @@
-﻿using DreamEducation.Domain.Entities.ManyToMany;
+﻿using DreamEducation.Domain.Entities.Courses;
 using System.Collections.Generic;
 
 namespace DreamEducation.Domain.Entities.Users
 {
     public class Student : User
     {
-        public ICollection<CourseStudent> Courses { get; set; }
+        public ICollection<Course> Courses { get; set; }
     }
 }
