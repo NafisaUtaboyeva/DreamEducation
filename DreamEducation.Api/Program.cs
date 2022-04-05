@@ -19,12 +19,12 @@ namespace DreamEducation.Api
                 ).CreateLogger();
             try
             {
-                Log.Information("Dastur yurdi");
+                Log.Information("Project runed");
                 CreateHostBuilder(args).Build().Run();
             }
             catch (Exception exception)
             {
-                Log.Fatal(exception, "Dastur yurishda xatolik bor");
+                Log.Fatal(exception, "An error in project's run");
             }
             finally
             {
