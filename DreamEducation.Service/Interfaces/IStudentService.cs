@@ -2,6 +2,7 @@
 using DreamEducation.Domain.Configurations;
 using DreamEducation.Domain.Entities.Users;
 using DreamEducation.Service.DTOs.Students;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +18,8 @@ namespace DreamEducation.Service.Interfaces
         Task<BaseResponse<IEnumerable<Student>>> GetAllAsync(PaginationParams @params, Expression<Func<Student, bool>> expression = null);
         Task<BaseResponse<bool>> DeleteAsync(Expression<Func<Student, bool>> expression);
         Task<BaseResponse<Student>> UpdateAsync(Guid id, StudentForCreationDto studentDto);
-
-        Task<string> SaveFileAsync(Stream file, string fileName);
+        Task<BaseResponse<Student>> LoginAsync(StudentForLoginDto dto);
+        Task<BaseResponse<Student>> SetImageAsync(Expression<Func<Student, bool>> expression, IFormFile image);
+        Task<BaseResponse<Student>> DeleteImageAsync(Expression<Func<Student, bool>> expression);
     }
 }

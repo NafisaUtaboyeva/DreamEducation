@@ -8,10 +8,12 @@ using DreamEducation.Service.DTOs.Students;
 using DreamEducation.Service.Extensions;
 using DreamEducation.Service.Interfaces;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -36,16 +38,16 @@ namespace DreamEducation.Service.Services
         {
             var response = new BaseResponse<Student>();
 
-            var existStudent = await unitOfWork.Students.GetAsync(p => p.Username == studentDto.Login || p.Email == studentDto.Email);
+            var existStudent = await unitOfWork.Students.GetAsync(p => p.Username == studentDto.Username || p.Email == studentDto.Email);
             if (existStudent is not null)
             {
-                response.Error = new ErrorResponse(400, "User is exist");
+                response.Error = new ErrorResponse(400, "User is exist!");
                 return response;
             }
 
             var mappedStudent = mapper.Map<Student>(studentDto);
+            mappedStudent.Password = studentDto.Password.ToHash256();
 
-            mappedStudent.Password = mappedStudent.Password.ToHash256();
             var result = await unitOfWork.Students.CreateAsync(mappedStudent);
 
             await unitOfWork.SaveChangesAsync();
@@ -60,14 +62,14 @@ namespace DreamEducation.Service.Services
             var response = new BaseResponse<bool>();
 
             var existStudent = await unitOfWork.Students.GetAsync(expression);
-            if (existStudent is null)
+            if (existStudent is null || existStudent.State == ItemState.Deleted)
             {
-                response.Error = new ErrorResponse(404, "User not found");
+                response.Error = new ErrorResponse(404, "User not found!");
                 return response;
             }
             existStudent.Delete();
 
-            var result = await unitOfWork.Students.UpdateAsync(existStudent);
+            await unitOfWork.Students.UpdateAsync(existStudent);
 
             await unitOfWork.SaveChangesAsync();
 
@@ -76,13 +78,35 @@ namespace DreamEducation.Service.Services
             return response;
         }
 
+        public async Task<BaseResponse<Student>> DeleteImageAsync(Expression<Func<Student, bool>> expression)
+        {
+            var response = new BaseResponse<Student>();
+
+            var student = await unitOfWork.Students.GetAsync(expression);
+
+            if(student is null || student.State == ItemState.Deleted)
+            {
+                response.Error = new ErrorResponse(404, "User not found!");
+                return response;
+            }
+            student.Image = null;
+            student.Update();
+
+            await unitOfWork.Students.UpdateAsync(student);
+            await unitOfWork.SaveChangesAsync();
+
+            response.Data = student;
+
+            return response;
+        }
+
         public async Task<BaseResponse<IEnumerable<Student>>> GetAllAsync(PaginationParams @params, Expression<Func<Student, bool>> expression = null)
         {
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-
             var response = new BaseResponse<IEnumerable<Student>>();
 
             var students = await unitOfWork.Students.GetAllAsync(expression);
+
+            students = students.Where(st => st.State != ItemState.Deleted);
 
             response.Data = students.ToPagedList(@params);
 
@@ -94,9 +118,9 @@ namespace DreamEducation.Service.Services
             var response = new BaseResponse<Student>();
 
             var student = await unitOfWork.Students.GetAsync(expression);
-            if (student is null)
+            if (student is null || student.State == ItemState.Deleted)
             {
-                response.Error = new ErrorResponse(404, "User not found");
+                response.Error = new ErrorResponse(404, "User not found!");
                 return response;
             }
 
@@ -105,17 +129,47 @@ namespace DreamEducation.Service.Services
             return response;
         }
 
-        public async Task<string> SaveFileAsync(Stream file, string fileName)
+        public async Task<BaseResponse<Student>> LoginAsync(StudentForLoginDto dto)
         {
-            fileName = Guid.NewGuid().ToString("N") + "_" + fileName;
-            string storagePath = config.GetSection("Storage:ImageUrl").Value;
-            string filePath = Path.Combine(env.WebRootPath, $"{storagePath}/{fileName}");
+            var response = new BaseResponse<Student>();
 
-            FileStream mainFile = File.Create(filePath);
-            await file.CopyToAsync(mainFile);
-            mainFile.Close();
+            var password = dto.Password.ToHash256();
 
-            return fileName;
+            var user = await unitOfWork.Students.GetAsync(p => p.Username == dto.Username && p.Password == password);
+
+            if (user is null)
+            {
+                response.Error = new ErrorResponse(404, "User not found!");
+                return response;
+            }
+
+            response.Data = user;
+
+            return response;
+        }
+
+        public async Task<BaseResponse<Student>> SetImageAsync(Expression<Func<Student, bool>> expression, IFormFile image)
+        {
+            var response = new BaseResponse<Student>();
+
+            var user = await unitOfWork.Students.GetAsync(expression);
+
+            if (user is null)
+            {
+                response.Error = new ErrorResponse(404, "User not found!");
+                return response;
+            }
+
+            user.Image = await FileExtensions.SaveFileAsync(image.OpenReadStream(), image.FileName, config, env);
+
+            user.Update();
+            await unitOfWork.Students.UpdateAsync(user);
+
+            await unitOfWork.SaveChangesAsync();
+
+            response.Data = user;
+
+            return response;
         }
 
         public async Task<BaseResponse<Student>> UpdateAsync(Guid id, StudentForCreationDto studentDto)
@@ -125,11 +179,12 @@ namespace DreamEducation.Service.Services
             var student = await unitOfWork.Students.GetAsync(p => p.Id == id && p.State != ItemState.Deleted);
             if (student is null)
             {
-                response.Error = new ErrorResponse(404, "User not found");
+                response.Error = new ErrorResponse(404, "User not found!");
                 return response;
             }
 
             student = mapper.Map<Student>(studentDto);
+            student.Id = id;
 
             student.Update();
 

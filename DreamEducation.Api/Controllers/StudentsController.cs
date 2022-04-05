@@ -5,6 +5,7 @@ using DreamEducation.Domain.Enums;
 using DreamEducation.Service.DTOs.Students;
 using DreamEducation.Service.Interfaces;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,9 @@ namespace DreamEducation.Api.Controllers
     public class StudentsController : ControllerBase
     {
         private readonly IStudentService studentService;
-        private readonly IWebHostEnvironment env;
         public StudentsController(IStudentService studentService, IWebHostEnvironment env)
         {
             this.studentService = studentService;
-            this.env = env;
         }
 
         [HttpPost]
@@ -60,7 +59,31 @@ namespace DreamEducation.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<BaseResponse<bool>>> Delete(Guid id)
         {
-            var result = await studentService.DeleteAsync(p => p.Id == id && p.State != ItemState.Deleted);
+            var result = await studentService.DeleteAsync(p => p.Id == id);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
+        }
+
+        [HttpPost("Login")]
+        public async Task<ActionResult<Student>> Login(StudentForLoginDto studentDto)
+        {
+            var result = await studentService.LoginAsync(studentDto);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
+        }
+
+        [HttpPost("Image/{id}")]
+        public async Task<ActionResult<Student>> SetImage(Guid id, IFormFile image)
+        {
+            var result = await studentService.SetImageAsync(p => p.Id == id, image);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
+        }
+
+        [HttpDelete("Image/{id}")]
+        public async Task<ActionResult<Student>> DeleteImage(Guid id)
+        {
+            var result = await studentService.DeleteImageAsync(p => p.Id == id);
 
             return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
