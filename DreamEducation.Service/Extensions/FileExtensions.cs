@@ -25,7 +25,7 @@ namespace DreamEducation.Service.Extensions
             await file.CopyToAsync(mainFile);
             mainFile.Close();
 
-            return fileName;
+            return filePath;
         }
     }
 }
