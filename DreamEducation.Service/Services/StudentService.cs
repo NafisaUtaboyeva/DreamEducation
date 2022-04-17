@@ -46,6 +46,7 @@ namespace DreamEducation.Service.Services
 
             var mappedStudent = mapper.Map<Student>(studentDto);
             mappedStudent.Password = studentDto.Password.ToHash256();
+            mappedStudent.Image = await FileExtensions.SaveFileAsync(studentDto.Image.OpenReadStream(), studentDto.Image.FileName, config, env);
 
             var result = await unitOfWork.Students.CreateAsync(mappedStudent);
 

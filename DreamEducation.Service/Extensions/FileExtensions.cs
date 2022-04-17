@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using DreamEducation.Service.Helpers;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
@@ -10,6 +11,8 @@ namespace DreamEducation.Service.Extensions
     {
         public static async Task<string> SaveFileAsync(Stream file, string fileName, IConfiguration config, IWebHostEnvironment env)
         {
+            string hostUrl = HttpContextHelper.Context?.Request?.Scheme + "://" + HttpContextHelper.Context?.Request?.Host.Value;
+
             fileName = Guid.NewGuid().ToString("N") + "_" + fileName;
             string storagePath;
             if (fileName.Contains(".mp4"))
@@ -22,10 +25,12 @@ namespace DreamEducation.Service.Extensions
 
             FileStream mainFile = File.Create(filePath);
 
+            string webUrl = $@"{hostUrl}/{storagePath}/{fileName}";
+
             await file.CopyToAsync(mainFile);
             mainFile.Close();
 
-            return filePath;
+            return webUrl;
         }
     }
 }
